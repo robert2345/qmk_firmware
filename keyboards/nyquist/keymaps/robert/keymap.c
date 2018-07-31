@@ -5,6 +5,11 @@
 #include "quantum_keycodes.h"
 #include "pincontrol.h"
 
+#include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+#include <Arduino.h>
+
+
 #define _______ KC_TRNS
 
 #define SOLENOID_DEFAULT_DWELL 75 
@@ -12,7 +17,7 @@
 #define SOLENOID_MIN_DWELL 4
 #define SOLENOID_PIN D3
 
-#define TIMER2 2
+#define TIMER3 3
 
 extern keymap_config_t keymap_config;
 
@@ -24,6 +29,9 @@ enum planck_keycodes {
   SOLENOID_BUZZ_OFF,
   EXT_PLV
 };
+
+int timer3_pin_port;
+int timer3_pin_mask;
 
 bool solenoid_enabled = false;
 bool solenoid_on = false;
@@ -63,6 +71,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             _______,  _______,  _______,  _______,  _______,  _______,  _______,        KC_0,     KC_0,     KC_DOT,   KC_ENT,         KC_CAPS),
 };
 
+/* Local function prototypes */
+static void enable_timer();
+static void setup_timer();
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
   return MACRO_NONE;
@@ -137,8 +148,9 @@ void solenoid_fire(void) {
   if (solenoid_buzz && solenoid_buzzing) return;
 */
 
-//timer variant
-if (solenoid_on) return;
+    //timer variant
+    if (solenoid_on) return;
+
   solenoid_on = true;
   //solenoid_buzzing = true;
   enable_timer();
@@ -267,24 +279,24 @@ void led_set_user(uint8_t usb_led) {
 
 }
 
-setup_timer() {
+static void setup_timer() {
     // 8 bit timer
-    TCCR2A = 0;
-    TCCR2B = 0;
-    bitWrite(TCCR2A, WGM21, 1);
-    bitWrite(TCCR2B, CS20, 1);
-    timer2_pin_port = portOutputRegister(digitalPinToPort(SOLENOID_PIN));
-    timer2_pin_mask = digitalPinToBitMask(SOLENOID_PIN);
+    TCCR3A = 0;
+    TCCR3B = 0;
+    bitWrite(TCCR3A, WGM31, 1);
+    bitWrite(TCCR3B, CS30, 1);
+    timer3_pin_port = portOutputRegister(digitalPinToPort(SOLENOID_PIN));
+    timer3_pin_mask = digitalPinToBitMask(SOLENOID_PIN);
 }
 
-void enable_timer()
+static void enable_timer()
 {
   uint8_t prescalarbits = 0b001;
-  long toggle_count = 0;
+  //long toggle_count = 0;
   uint32_t ocr = 0;
-  int8_t _timer;
+  int8_t _timer = TIMER3;
 
-  frequency = 20
+  int frequency = 20;
 
   ocr = F_CPU / frequency / 2 - 1;
   prescalarbits = 0b001;  // ck/1: same for both timers
@@ -324,14 +336,14 @@ void enable_timer()
       }
   }
 
-  TCCR2B = prescalarbits;
+  TCCR3B = prescalarbits;
 
   // Set the OCR for the given timer,
   // set the toggle count,
   // then turn on the interrupts
 #if defined(OCR2A) && defined(TIMSK2) && defined(OCIE2A)
-  OCR2A = ocr;
-  bitWrite(TIMSK2, OCIE2A, 1);
+  OCR3A = ocr;
+  bitWrite(TIMSK3, OCIE3A, 1);
 #endif
 
 }
@@ -339,16 +351,16 @@ void enable_timer()
 
 void disableTimer(uint8_t _timer)
 {
-    bitWrite(TIMSK2, OCIE2A, 0); // disable interrupt
-    TCCR2A = (1 << WGM20);
-    TCCR2B = (TCCR2B & 0b11111000) | (1 << CS22);
-    OCR2A = 0;
+    bitWrite(TIMSK3, OCIE3A, 0); // disable interrupt
+    TCCR3A = (1 << WGM30);
+    TCCR3B = (TCCR3B & 0b11111000) | (1 << CS32);
+    OCR3A = 0;
 }
 
-ISR(TIMER2_COMPA_vect)
+ISR(TIMER3_COMPA_vect)
 {
  solenoid_stop();
- disableTimer();
+ disableTimer(TIMER3);
 }
 
 
