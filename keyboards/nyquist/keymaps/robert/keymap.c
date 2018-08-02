@@ -7,7 +7,7 @@
 
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
-#include <Arduino.h>
+//#include <Arduino.h>
 
 
 #define _______ KC_TRNS
@@ -72,8 +72,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 /* Local function prototypes */
-static void enable_timer();
-static void setup_timer();
+static void enable_timer(void);
+static void setup_timer(void);
 
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt) {
   return MACRO_NONE;
@@ -164,7 +164,9 @@ void solenoid_setup(void) {
 }
 
 void matrix_init_user(void) {
+#ifdef USE_SOLENOID
   solenoid_setup();
+#endif
 }
 
 void matrix_scan_user(void) {
@@ -172,10 +174,11 @@ void matrix_scan_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
- 
+#ifdef USE_SOLENOID
   if (record->event.pressed) {
     solenoid_fire(); 
   }
+#endif
 
   switch (keycode) {
     /*case SING_RANDOM_SONG:
@@ -216,6 +219,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;*/
+#ifdef USE_SOLENOID
     case SOLENOID_TOG:
       if (record->event.pressed) {
         solenoid_toggle();
@@ -241,6 +245,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         solenoid_buzz_off();
       }
       break;
+#endif
   }
   return true;
 }
@@ -279,17 +284,19 @@ void led_set_user(uint8_t usb_led) {
 
 }
 
-static void setup_timer() {
+static void setup_timer(void) {
     // 8 bit timer
     TCCR3A = 0;
     TCCR3B = 0;
-    bitWrite(TCCR3A, WGM31, 1);
-    bitWrite(TCCR3B, CS30, 1);
-    timer3_pin_port = portOutputRegister(digitalPinToPort(SOLENOID_PIN));
-    timer3_pin_mask = digitalPinToBitMask(SOLENOID_PIN);
+
+    // These SHOULD be included but the functions/macros are not defined. TODO
+    //bitWrite(TCCR3A, WGM31, 1);
+    //bitWrite(TCCR3B, CS30, 1);
+    //timer3_pin_port = portOutputRegister(digitalPinToPort(SOLENOID_PIN));
+    //timer3_pin_mask = digitalPinToBitMask(SOLENOID_PIN);
 }
 
-static void enable_timer()
+static void enable_timer(void)
 {
   uint8_t prescalarbits = 0b001;
   //long toggle_count = 0;
@@ -343,7 +350,8 @@ static void enable_timer()
   // then turn on the interrupts
 #if defined(OCR2A) && defined(TIMSK2) && defined(OCIE2A)
   OCR3A = ocr;
-  bitWrite(TIMSK3, OCIE3A, 1);
+  //TODO enable with correct defines
+  //bitWrite(TIMSK3, OCIE3A, 1);
 #endif
 
 }
@@ -351,7 +359,9 @@ static void enable_timer()
 
 void disableTimer(uint8_t _timer)
 {
-    bitWrite(TIMSK3, OCIE3A, 0); // disable interrupt
+
+  //TODO enable with correct defines
+  //  bitWrite(TIMSK3, OCIE3A, 0); // disable interrupt
     TCCR3A = (1 << WGM30);
     TCCR3B = (TCCR3B & 0b11111000) | (1 << CS32);
     OCR3A = 0;
