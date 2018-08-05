@@ -21,16 +21,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PREVENT_STUCK_MODIFIERS
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID       0x1c11
-#define PRODUCT_ID      0xb04d
+#define VENDOR_ID       0xEA61
+#define PRODUCT_ID      0x0001
 #define DEVICE_VER      0x0001
 /* in python2: list(u"whatever".encode('utf-16-le')) */
 /*   at most 32 characters or the ugly hack in usb_main.c borks */
-#define MANUFACTURER Input Club
-#define PRODUCT Infinity_60%/QMK
+#define MANUFACTURER robert2345
+#define PRODUCT Eagle Keyboard
 /* key matrix size */
-#define MATRIX_ROWS 9
-#define MATRIX_COLS 7
+#define MATRIX_ROWS 5
+#define MATRIX_COLS 19
 
 /* define if matrix has ghost */
 //#define MATRIX_HAS_GHOST
@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define INFINITY_PROTOTYPE
 
 /* Keymap for Infinity 1.1a (first revision with LED support) */
-#define INFINITY_LED
+//#define INFINITY_LED
 
 /*
  * Feature disable options
