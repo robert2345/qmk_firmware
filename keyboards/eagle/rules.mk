@@ -1,7 +1,5 @@
 # project specific files
-SRC =	matrix.c \
-	led.c \
-	led_controller.c
+SRC =	matrix.c
 
 ## chip/board settings
 # - the next two should match the directories in
@@ -66,4 +64,4 @@ SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = yes	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # Custom matrix file
 
-LAYOUTS = 60_ansi_split_bs_rshift
+LAYOUTS = LAYOUT_EAGLE_ONE

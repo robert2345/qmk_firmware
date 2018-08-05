@@ -48,11 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
 )
 
-/* Keymap for Infinity prototype */
-//#define INFINITY_PROTOTYPE
-
-/* Keymap for Infinity 1.1a (first revision with LED support) */
-//#define INFINITY_LED
 
 /*
  * Feature disable options
