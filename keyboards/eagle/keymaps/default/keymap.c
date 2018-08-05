@@ -1,4 +1,4 @@
-#include "infinity60.h"
+#include "eagle.h"
 
 const uint16_t keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /* Layer 0: Default Layer
