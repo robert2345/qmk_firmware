@@ -23,12 +23,11 @@
  * Eagle Pinusage:
  * Row pins are input with internal pull-down. Col pins are output and strobe with high.
  * Key is high or 1 when it turns on.
- *     col: { PTD1, PTD2, PTD3, PTD4, PTD5, PTD6, PTD7 }
- *     row: { PTB0, PTB1, PTB2, PTB3, PTB16, PTB17, PTC4, PTC5, PTD0 }
  */
+
 /* matrix state(1:on, 0:off) */
-static matrix_row_t matrix[MATRIX_ROWS];
-static matrix_row_t matrix_debouncing[MATRIX_ROWS];
+static matrix_row_t matrix[MATRIX_COLS];
+static matrix_row_t matrix_debouncing[MATRIX_COLS];
 static bool debouncing = false;
 static uint16_t debouncing_time = 0;
 
@@ -105,7 +104,7 @@ void matrix_init(void)
 uint8_t matrix_scan(void)
 {
     for (int col = 0; col < MATRIX_ROWS; col++) {
-        matrix_col_t data = 0;
+        matrix_row_t data = 0;
         // strobe row
         switch (col) {
 		case 0: palSetPad(GPIOB, 16); break;
@@ -137,10 +136,10 @@ uint8_t matrix_scan(void)
 	wait_us(20);
 
 	 // read row data: { PTD1, PTD4, PTD5, PTD6, PTD7 }
-        data = (palReadPadl(GPIOB, 2) |
-              (palReadPad(GPIOD, 5) << 1)
-              (palReadPad(GPIOD, 6) << 2)
-              (palReadPad(GPIOC, 1) << 3)
+        data = (palReadPad(GPIOB, 2) |
+             (palReadPad(GPIOD, 6) << 1) |
+              (palReadPad(GPIOD, 6) << 2) |
+              (palReadPad(GPIOC, 1) << 3) |
               (palReadPad(GPIOC, 2) << 4));
 	
         // un-strobe col
