@@ -19,7 +19,7 @@ MCU_SERIES = K20x
 #   - MK20DX128 for Teensy 3.0
 #   - MK20DX256 for Teensy 3.1 and 3.2
 #   - MK20DX128BLDR4 for Infinity with Kiibohd bootloader
-MCU_LDSCRIPT = MK20DX128BLDR4
+MCU_LDSCRIPT = MK20DX256
 
 # Startup code to use
 #  - it should exist in <chibios>/os/common/ports/ARMCMx/compilers/GCC/mk/
@@ -27,7 +27,7 @@ MCU_LDSCRIPT = MK20DX128BLDR4
 #   - kl2x for Teensy LC
 #   - k20x5 for Teensy 3.0 and Infinity KB
 #   - k20x7 for Teensy 3.1 and 3.2
-MCU_STARTUP = k20x5
+MCU_STARTUP = k20x7
 
 # Board: it should exist either in <chibios>/os/hal/boards/
 #  or <this_dir>/boards
@@ -36,7 +36,7 @@ MCU_STARTUP = k20x5
 #   - PJRC_TEENSY_3 for Teensy 3.0
 #   - PJRC_TEENSY_3_1 for Teensy 3.1 or 3.2
 #   - MCHCK_K20 for Infinity KB
-BOARD = MCHCK_K20
+BOARD = PJRC_TEENSY_3_1
 
 # Cortex version
 # Teensy LC is cortex-m0; Teensy 3.x are cortex-m4

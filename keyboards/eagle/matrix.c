@@ -9,17 +9,6 @@
 
 
 /*
- * Infinity Pinusage:
- * Column pins are input with internal pull-down. Row pins are output and strobe with high.
- * Key is high or 1 when it turns on.
- *  INFINITY PRODUCTION (NO LED)
- *     col: { PTD1, PTD2, PTD3, PTD4, PTD5, PTD6, PTD7 }
- *     row: { PTB0, PTB1, PTB2, PTB3, PTB16, PTB17, PTC4, PTC5, PTD0 }
- *  INFINITY PRODUCTION (WITH LED)
- *     col: { PTD1, PTD2, PTD3, PTD4, PTD5, PTD6, PTD7 }
- *     row: { PTC0, PTC1, PTC2, PTC3, PTC4, PTC5, PTC6, PTC7, PTD0 }
- */
-/*
  * Eagle Pinusage:
  * Row pins are input with internal pull-down. Col pins are output and strobe with high.
  * Key is high or 1 when it turns on.
@@ -95,15 +84,14 @@ void matrix_init(void)
     palSetPadMode(GPIOC, 1,  PAL_MODE_INPUT_PULLDOWN);
     palSetPadMode(GPIOC, 2, PAL_MODE_INPUT_PULLDOWN);
 
-    memset(matrix, 0, MATRIX_ROWS * sizeof(matrix_row_t));
-    memset(matrix_debouncing, 0, MATRIX_ROWS * sizeof(matrix_row_t));
-
+    memset(matrix, 0, MATRIX_COLS * sizeof(matrix_row_t));
+    memset(matrix_debouncing, 0, MATRIX_COLS * sizeof(matrix_row_t)); 
     matrix_init_quantum();
 }
 
 uint8_t matrix_scan(void)
 {
-    for (int col = 0; col < MATRIX_ROWS; col++) {
+    for (int col = 0; col < MATRIX_COLS; col++) {
         matrix_row_t data = 0;
         // strobe row
         switch (col) {
@@ -137,7 +125,7 @@ uint8_t matrix_scan(void)
 
 	 // read row data: { PTD1, PTD4, PTD5, PTD6, PTD7 }
         data = (palReadPad(GPIOB, 2) |
-             (palReadPad(GPIOD, 6) << 1) |
+             (palReadPad(GPIOD, 5) << 1) |
               (palReadPad(GPIOD, 6) << 2) |
               (palReadPad(GPIOC, 1) << 3) |
               (palReadPad(GPIOC, 2) << 4));
@@ -184,22 +172,32 @@ uint8_t matrix_scan(void)
 
 bool matrix_is_on(uint8_t row, uint8_t col)
 {
-    return (matrix[row] & (1<<col));
+    return (matrix[col] & (1<<row));
+}
+
+matrix_row_t matrix_get_col(uint8_t col)
+{
+    return matrix[col];
 }
 
 matrix_row_t matrix_get_row(uint8_t row)
 {
-    return matrix[row];
+	matrix_row_t output_row = 0;
+	for (uint32_t col = 0; col < MATRIX_COLS; col++) {
+		matrix_row_t col_data = matrix_get_col(col);
+		output_row |= ((col_data >> row) & 1) << col;
+	}
+	return output_row;
 }
 
 void matrix_print(void)
 {
     xprintf("\nr/c 01234567\n");
-    for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
+    for (uint8_t col = 0; col < MATRIX_COLS; col++) {
         xprintf("%02X: ");
-        matrix_row_t data = matrix_get_row(row);
-        for (int col = 0; col < MATRIX_COLS; col++) {
-            if (data & (1<<col))
+        matrix_row_t data = matrix_get_col(col);
+        for (int row = 0; row < MATRIX_ROWS; row++) {
+            if (data & (1<<row))
                 xprintf("1");
             else
                 xprintf("0");
