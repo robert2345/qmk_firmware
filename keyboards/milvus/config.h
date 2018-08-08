@@ -21,13 +21,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define PREVENT_STUCK_MODIFIERS
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID       0xEA61
+#define VENDOR_ID       0x2345
 #define PRODUCT_ID      0x0001
 #define DEVICE_VER      0x0001
 /* in python2: list(u"whatever".encode('utf-16-le')) */
 /*   at most 32 characters or the ugly hack in usb_main.c borks */
 #define MANUFACTURER robert2345
-#define PRODUCT Eagle Keyboard
+#define PRODUCT Milvus Keyboard
 /* key matrix size */
 #define MATRIX_ROWS 5
 #define MATRIX_COLS 19

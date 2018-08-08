@@ -9,7 +9,7 @@
 
 
 /*
- * Eagle Pinusage:
+ * Milvus Pinusage:
  * Row pins are input with internal pull-down. Col pins are output and strobe with high.
  * Key is high or 1 when it turns on.
  */

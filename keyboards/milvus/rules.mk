@@ -64,4 +64,4 @@ SLEEP_LED_ENABLE = yes  # Breathing sleep LED during USB suspend
 NKRO_ENABLE = yes	    # USB Nkey Rollover
 CUSTOM_MATRIX = yes # Custom matrix file
 
-LAYOUTS = LAYOUT_EAGLE_ONE
+LAYOUTS = LAYOUT_MILVUS_ONE

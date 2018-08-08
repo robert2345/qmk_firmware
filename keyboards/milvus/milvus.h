@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "quantum.h"
 
-#define LAYOUT_EAGLE_ONE KEYMAP
+#define LAYOUT_MILVUS_ONE KEYMAP
 
 #define KEYMAP( \
     K0_0, K0_1, K0_2, K0_3, K0_4, K0_5, K0_6, K0_7, K0_8, K0_9, K0_10, K0_11, K0_12, K0_13, K0_14, K0_15, K0_16, K0_17, K0_18, \

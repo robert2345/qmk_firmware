@@ -27,6 +27,11 @@ enum planck_keycodes {
   SOLENOID_DWELL_PLUS,
   SOLENOID_BUZZ_ON,
   SOLENOID_BUZZ_OFF,
+  // The US International layout changes the `, ~, ^, " (for ¨), and ' (for ´) keys into dead keys for producing accented characters.
+  MACRO_SQUOTE,
+  MACRO_DQUOTE,
+  MACRO_TILDE,
+  MACRO_CFLEX,
   EXT_PLV
 };
 
@@ -246,6 +251,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       break;
 #endif
+    case MACRO_SQUOTE:
+      SEND_STRING("\' ");
+      break;
+  case MACRO_DQUOTE,
+      SEND_STRING("\" ");
+      break;
+  case MACRO_TILDE,
+      SEND_STRING("^ ");
+      break;
+  case MACRO_CFLEX,
+      SEND_STRING("' ");
+      break;
   }
   return true;
 }
