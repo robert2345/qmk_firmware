@@ -94,7 +94,7 @@ uint8_t matrix_scan(void)
     for (int col = 0; col < MATRIX_COLS; col++) {
         matrix_row_t data = 0;
         // strobe col. My numbering got backwars. Just correcting it by subraction from max
-	switch (MATRIX_COLS - col) {
+	switch (MATRIX_COLS - col - 1) {
 		case 0: palSetPad(GPIOB, 16);break;
 		case 1: palSetPad(GPIOB, 17);break;
 		case 2: palSetPad(GPIOD, 0);break;
@@ -131,7 +131,7 @@ uint8_t matrix_scan(void)
 			(palReadPad(GPIOC, 7) << 0));
 	
         // un-strobe col
-        switch (MATRIX_COLS - col) {
+        switch (MATRIX_COLS - col - 1) {
 		case 0: palClearPad(GPIOB, 16); break;
 		case 1: palClearPad(GPIOB, 17); break;
 		case 2: palClearPad(GPIOD, 0); break;
