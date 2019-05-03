@@ -12,7 +12,7 @@
 
 #define _______ KC_TRNS
 
-#define SOLENOID_DEFAULT_DWELL 75 
+#define SOLENOID_DEFAULT_DWELL 75
 #define SOLENOID_MAX_DWELL 100
 #define SOLENOID_MIN_DWELL 4
 #define SOLENOID_PIN D3
@@ -102,7 +102,7 @@ void solenoid_dwell_plus(void) {
 
 void solenoid_toggle(void) {
   solenoid_enabled = !solenoid_enabled;
-} 
+}
 
 void solenoid_stop(void) {
   digitalWrite(SOLENOID_PIN, PinLevelLow);
@@ -117,7 +117,7 @@ void solenoid_check(void) {
 
   elapsed = timer_elapsed(solenoid_start);
 
-  //Check if it's time to finish this solenoid click cycle 
+  //Check if it's time to finish this solenoid click cycle
   if (elapsed > solenoid_dwell) {
     solenoid_stop();
     return;
@@ -138,7 +138,7 @@ void solenoid_check(void) {
       }
     }
   }
-  
+
 }
 
 void solenoid_fire(void) {
@@ -159,7 +159,7 @@ void solenoid_fire(void) {
   solenoid_on = true;
   //solenoid_buzzing = true;
   enable_timer();
-  solenoid_start = timer_read(); 
+  solenoid_start = timer_read();
   digitalWrite(SOLENOID_PIN, PinLevelHigh);
 }
 
@@ -181,7 +181,7 @@ void matrix_scan_user(void) {
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 #ifdef USE_SOLENOID
   if (record->event.pressed) {
-    solenoid_fire(); 
+    solenoid_fire();
   }
 #endif
 
@@ -254,13 +254,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MACRO_SQUOTE:
       SEND_STRING("\' ");
       break;
-  case MACRO_DQUOTE,
+    case MACRO_DQUOTE:
       SEND_STRING("\" ");
       break;
-  case MACRO_TILDE,
+    case MACRO_TILDE:
       SEND_STRING("^ ");
       break;
-  case MACRO_CFLEX,
+    case MACRO_CFLEX:
       SEND_STRING("' ");
       break;
   }

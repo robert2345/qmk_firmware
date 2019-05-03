@@ -16,7 +16,7 @@
 #  include "serial.h"
 #endif
 
-volatile bool isLeftHand = true;
+volatile bool isLeftHand = false;
 
 static void setup_handedness(void) {
   #ifdef EE_HANDS
